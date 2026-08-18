@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/organic-ed968383-3ad6-4f94-b713-7307175054f9/styles.css">
+  <script src="_ds/organic-ed968383-3ad6-4f94-b713-7307175054f9/_ds_bundle.js"></script>
+  <script src="./image-slot.js"></script>
+  <style>
+    body{margin:0}
+    a{color:var(--color-accent-700);text-decoration:none}
+    a:hover{color:var(--color-accent-800);text-decoration:underline}
+    .vm-link{cursor:pointer;border:none;background:none;font-family:var(--font-body);font-size:14px;font-weight:600;color:var(--color-text)}
+    .vm-link:hover{color:var(--color-accent-700)}
+    .vm-langbtn{cursor:pointer;border:1px solid var(--color-divider);background:var(--color-bg);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;font-family:var(--font-body)}
+    .vm-langbtn:hover{background:var(--color-accent-100);border-color:var(--color-accent-300)}
+    .vm-fadein{animation:vmFade .4s ease both}
+    @keyframes vmFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  </style>
+</helmet>
+
+<div style="background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);min-height:100vh;width:100%;overflow-x:hidden">
+
+  <!-- NAV -->
+  <div style="position:sticky;top:0;z-index:60;background:color-mix(in srgb, var(--color-bg) 92%, transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--color-divider)">
+    <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:12px">
+      <button class="vm-link" style="font-family:var(--font-heading);font-size:17px;font-weight:400;white-space:nowrap;flex-shrink:0" onclick="{{ goHome }}">Vivian Mukotaka</button>
+
+      <sc-if value="{{ isDesktopNav }}">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:nowrap">
+          <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+            <button class="vm-link" style="opacity:{{ item.opacity }};white-space:nowrap;font-size:13px" onclick="{{ item.goto }}">{{ item.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <sc-for list="{{ langOptions }}" as="item" hint-placeholder-count="3">
+            <button class="vm-langbtn" style="background:{{ item.bg }};border-color:{{ item.border }};color:{{ item.color }}" onclick="{{ item.select }}">{{ item.label }}</button>
+          </sc-for>
+          <button class="btn btn-primary" style="margin-left:4px;border-radius:999px;padding:10px 18px;white-space:nowrap" onclick="{{ goBook }}">{{ t.nav.book }}</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMobileNav }}">
+        <button aria-label="Menu" class="vm-link" style="font-size:24px;line-height:1;padding:4px" onclick="{{ toggleMobileMenu }}">{{ mobileMenuGlyph }}</button>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ mobileMenuOpen }}">
+      <div style="display:flex;flex-direction:column;padding:8px 20px 22px;gap:4px;border-top:1px solid var(--color-divider)">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+          <button class="vm-link" style="text-align:left;padding:12px 4px;font-size:16px;opacity:{{ item.opacity }}" onclick="{{ item.gotoMobile }}">{{ item.label }}</button>
+        </sc-for>
+        <div style="display:flex;gap:10px;padding:8px 4px">
+          <sc-for list="{{ socials }}" as="soc" hint-placeholder-count="3">
+            <a href="{{ soc.url }}" target="_blank" rel="noopener" aria-label="{{ soc.label }}" style="width:40px;height:40px;border-radius:999px;background:var(--color-accent-2-100);color:var(--color-accent-2-800);display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{ soc.isInstagram }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></sc-if>
+              <sc-if value="{{ soc.isFacebook }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></sc-if>
+              <sc-if value="{{ soc.isWhatsapp }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></sc-if>
+            </a>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <sc-for list="{{ langOptions }}" as="item" hint-placeholder-count="3">
+            <button class="vm-langbtn" style="background:{{ item.bg }};border-color:{{ item.border }};color:{{ item.color }}" onclick="{{ item.select }}">{{ item.label }}</button>
+          </sc-for>
+        </div>
+        <button class="btn btn-primary" style="border-radius:999px;padding:14px 18px;margin-top:14px" onclick="{{ goBookMobile }}">{{ t.nav.book }}</button>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- HOME -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div class="vm-fadein">
+      <div style="position:relative;width:100%;height:{{ heroHeight }};overflow:hidden">
+        <image-slot id="hero-main" shape="rect" src="assets/photo-02-kimono-sakura-walk.jpg" placeholder="Hero: Vivian with clients, Tokyo skyline or Kyoto street" style="width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:color-mix(in srgb, #201e1d 30%, transparent)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg, color-mix(in srgb, #201e1d 65%, transparent) 0%, color-mix(in srgb, #201e1d 35%, transparent) 55%, color-mix(in srgb, #201e1d 10%, transparent) 90%)"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center"><div style="width:100%;max-width:1180px;padding:{{ heroPad }};box-sizing:border-box">
+          <div style="background:color-mix(in srgb, #201e1d 55%, transparent);border-radius:var(--radius-lg);padding:28px 32px;display:inline-block">
+            <h1 style="color:#fff;font-size:clamp(30px,6vw,52px);margin-bottom:12px;max-width:600px">{{ t.hero.title }}</h1>
+            <p style="color:#f5ead8;font-size:clamp(14px,2.2vw,18px);max-width:500px;margin-bottom:22px">{{ t.hero.subtitle }}</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn btn-primary" style="border-radius:999px;padding:14px 26px;font-size:15px" onclick="{{ goBook }}">{{ t.hero.cta }}</button>
+              <button class="btn btn-secondary" style="border-radius:999px;padding:14px 26px;font-size:15px;background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.5)" onclick="{{ goPackages }}">{{ t.hero.cta2 }}</button>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <div style="max-width:1180px;margin:0 auto;padding:18px 20px;color:var(--color-neutral-700);font-size:14px">{{ t.trust.line }}</div>
+
+      <div style="max-width:1180px;margin:0 auto;padding:24px 20px 48px">
+        <h2 style="margin-bottom:22px">{{ t.sessionsTitle }}</h2>
+        <div style="display:grid;grid-template-columns:{{ gridCols2 }};gap:18px">
+          <sc-for list="{{ t.sessions }}" as="s" hint-placeholder-count="4">
+            <button onclick="{{ goPackages }}" class="card elev-sm" style="text-align:left;cursor:pointer;border:1px solid var(--color-divider);background:var(--color-surface);border-radius:var(--radius-lg);overflow:hidden;padding:0;display:flex;flex-direction:column">
+              <div class="washed" style="aspect-ratio:4/3">
+                <image-slot id="{{ s.imgId }}" shape="rect" src="{{ s.imgSrc }}" placeholder="{{ s.title }}" style="width:100%;height:100%"></image-slot>
+              </div>
+              <div style="padding:20px">
+                <div class="card-title" style="font-family:var(--font-heading);font-size:18px;margin-bottom:6px">{{ s.title }}</div>
+                <div class="card-body" style="color:var(--color-neutral-700);font-size:14px;margin-bottom:12px">{{ s.desc }}</div>
+                <span style="color:var(--color-accent-700);font-size:13px;font-weight:600">{{ s.priceFrom }} →</span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="max-width:1180px;margin:0 auto;padding:0 20px 48px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+          <h2 style="margin:0">{{ t.portfolioTitle }}</h2>
+          <button class="vm-link" style="color:var(--color-accent-700)" onclick="{{ goPortfolio }}">{{ t.portfolioCta }} →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:{{ gridCols4 }};gap:14px">
+          <sc-for list="{{ homePreview }}" as="p" hint-placeholder-count="4">
+            <div class="washed" style="border-radius:var(--radius-md);overflow:hidden;aspect-ratio:3/4">
+              <image-slot id="{{ p.id }}" shape="rect" src="{{ p.src }}" placeholder="{{ p.caption }}" style="width:100%;height:100%"></image-slot>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:var(--color-accent-2-100);padding:36px 20px">
+        <div style="max-width:1180px;margin:0 auto">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+            <div>
+              <div style="font-family:var(--font-heading);font-size:18px;margin-bottom:4px">{{ t.igStrip.title }}</div>
+              <div style="color:var(--color-accent-2-800);font-size:14px">{{ t.igStrip.handle }}</div>
+            </div>
+            <a href="{{ igUrl }}" target="_blank" rel="noopener" class="btn btn-secondary" style="border-radius:999px;padding:12px 22px;background:#fff">{{ t.igStrip.cta }} ↗</a>
+          </div>
+          <div style="display:grid;grid-template-columns:{{ gridCols6 }};gap:12px">
+            <sc-for list="{{ igPosts }}" as="p" hint-placeholder-count="6">
+              <a href="{{ igUrl }}" target="_blank" rel="noopener" style="display:block;aspect-ratio:1/1;border-radius:var(--radius-md);overflow:hidden">
+                <image-slot id="{{ p.id }}" shape="rect" src="{{ p.src }}" placeholder="{{ p.caption }}" style="width:100%;height:100%"></image-slot>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width:1180px;margin:0 auto;padding:48px 20px 0">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+          <h2 style="margin:0">{{ t.blog.title }}</h2>
+          <button class="vm-link" style="color:var(--color-accent-700)" onclick="{{ goBlog }}">{{ t.blog.back }} →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:{{ gridCols3 }};gap:18px">
+          <sc-for list="{{ homeBlogPreview }}" as="post" hint-placeholder-count="3">
+            <button onclick="{{ post.select }}" style="text-align:left;cursor:pointer;border:1px solid var(--color-divider);background:var(--color-surface);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;padding:0">
+              <div class="washed" style="aspect-ratio:4/3">
+                <image-slot id="{{ post.imgId }}" shape="rect" src="{{ post.imgSrc }}" placeholder="{{ post.title }}" style="width:100%;height:100%"></image-slot>
+              </div>
+              <div style="padding:18px;display:flex;flex-direction:column;gap:6px">
+                <div class="tag tag-accent-2" style="align-self:flex-start;background:var(--color-accent-2-200);color:var(--color-accent-2-800)">{{ post.category }}</div>
+                <div style="font-family:var(--font-heading);font-size:16px">{{ post.title }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:56px 20px;text-align:center">
+        <div style="max-width:600px;margin:0 auto">
+          <h2 style="margin-bottom:10px">{{ t.ctaBand.title }}</h2>
+          <p style="color:var(--color-neutral-700);margin-bottom:22px">{{ t.ctaBand.subtitle }}</p>
+          <button class="btn btn-primary" style="border-radius:999px;padding:14px 30px;font-size:15px" onclick="{{ goBook }}">{{ t.ctaBand.cta }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- BLOG LIST -->
+  <sc-if value="{{ isBlog }}">
+    <div class="vm-fadein" style="max-width:1180px;margin:0 auto;padding:36px 20px 64px">
+      <h1 style="margin-bottom:8px">{{ t.blog.title }}</h1>
+      <p style="color:var(--color-neutral-700);margin-bottom:30px;max-width:560px">{{ t.blog.subtitle }}</p>
+      <div style="display:grid;grid-template-columns:{{ gridCols3 }};gap:24px">
+        <sc-for list="{{ blogPosts }}" as="post" hint-placeholder-count="4">
+          <button onclick="{{ post.select }}" style="text-align:left;cursor:pointer;border:1px solid var(--color-divider);background:var(--color-surface);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;padding:0">
+            <div class="washed" style="aspect-ratio:4/3">
+              <image-slot id="{{ post.imgId }}" shape="rect" src="{{ post.imgSrc }}" placeholder="{{ post.title }}" style="width:100%;height:100%"></image-slot>
+            </div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:8px">
+              <div class="tag tag-accent-2" style="align-self:flex-start;background:var(--color-accent-2-200);color:var(--color-accent-2-800)">{{ post.category }}</div>
+              <div style="font-family:var(--font-heading);font-size:18px">{{ post.title }}</div>
+              <div style="color:var(--color-neutral-700);font-size:14px">{{ post.excerpt }}</div>
+              <div style="color:var(--color-neutral-600);font-size:12px;margin-top:4px">{{ post.date }}</div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- BLOG POST -->
+  <sc-if value="{{ isBlogPost }}">
+    <div class="vm-fadein" style="max-width:720px;margin:0 auto;padding:36px 20px 72px">
+      <button class="vm-link" style="color:var(--color-accent-700);margin-bottom:20px" onclick="{{ goBlog }}">← {{ t.blog.back }}</button>
+      <div class="tag tag-accent-2" style="background:var(--color-accent-2-200);color:var(--color-accent-2-800);margin-bottom:14px">{{ activePost.category }}</div>
+      <h1 style="margin-bottom:8px">{{ activePost.title }}</h1>
+      <div style="color:var(--color-neutral-600);font-size:13px;margin-bottom:22px">{{ activePost.date }}</div>
+      <div class="washed" style="border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:16/9;margin-bottom:28px">
+        <image-slot id="{{ activePost.imgId }}" shape="rect" src="{{ activePost.imgSrc }}" placeholder="{{ activePost.title }}" style="width:100%;height:100%"></image-slot>
+      </div>
+      <sc-for list="{{ activePost.body }}" as="par" hint-placeholder-count="4">
+        <p style="color:var(--color-neutral-700);font-size:16px;margin-bottom:16px;line-height:1.7">{{ par }}</p>
+      </sc-for>
+      <div style="background:var(--color-accent-2-100);border-radius:var(--radius-lg);padding:28px;text-align:center;margin-top:36px">
+        <div style="font-family:var(--font-heading);font-size:18px;margin-bottom:14px">{{ t.ctaBand.title }}</div>
+        <button class="btn btn-primary" style="border-radius:999px;padding:12px 26px" onclick="{{ goBook }}">{{ t.ctaBand.cta }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- PORTFOLIO -->
+  <sc-if value="{{ isPortfolio }}">
+    <div class="vm-fadein" style="max-width:1180px;margin:0 auto;padding:36px 20px 64px">
+      <h1 style="margin-bottom:8px">{{ t.nav.portfolio }}</h1>
+      <p style="color:var(--color-neutral-700);margin-bottom:22px">{{ t.portfolioTitle }}</p>
+      <div style="display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap">
+        <sc-for list="{{ filterOptions }}" as="f" hint-placeholder-count="4">
+          <button class="btn" style="border-radius:999px;padding:8px 18px;font-size:13px;background:{{ f.bg }};color:{{ f.color }};border-color:{{ f.border }}" onclick="{{ f.select }}">{{ f.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:{{ gridCols3 }};gap:14px">
+        <sc-for list="{{ portfolioItems }}" as="p" hint-placeholder-count="9">
+          <div class="washed" style="border-radius:var(--radius-md);overflow:hidden;aspect-ratio:4/5">
+            <image-slot id="{{ p.id }}" shape="rect" src="{{ p.src }}" placeholder="{{ p.caption }}" style="width:100%;height:100%"></image-slot>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:36px;text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <sc-for list="{{ socials }}" as="soc" hint-placeholder-count="3">
+          <a href="{{ soc.url }}" target="_blank" rel="noopener" aria-label="{{ soc.label }}" style="width:44px;height:44px;border-radius:999px;background:var(--color-accent-2-100);color:var(--color-accent-2-800);display:flex;align-items:center;justify-content:center">
+            <sc-if value="{{ soc.isInstagram }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></sc-if>
+            <sc-if value="{{ soc.isFacebook }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></sc-if>
+            <sc-if value="{{ soc.isWhatsapp }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></sc-if>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- PACKAGES -->
+  <sc-if value="{{ isPackages }}">
+    <div class="vm-fadein" style="max-width:900px;margin:0 auto;padding:36px 20px 64px">
+      <h1 style="margin-bottom:8px">{{ t.packagesTitle }}</h1>
+      <p style="color:var(--color-neutral-700);margin-bottom:14px">{{ t.packagesSubtitle }}</p>
+      <div class="tag tag-outline" style="margin-bottom:30px;display:inline-block">{{ t.depositNote }}</div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ locations }}" as="loc" hint-placeholder-count="7">
+          <div style="border:1px solid var(--color-divider);border-radius:var(--radius-lg);background:var(--color-surface);overflow:hidden">
+            <button onclick="{{ loc.toggle }}" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 22px;cursor:pointer;background:none;border:none;text-align:left">
+              <span style="font-family:var(--font-heading);font-size:19px">{{ loc.name }}</span>
+              <span style="font-size:20px;color:var(--color-accent-700)">{{ loc.chevron }}</span>
+            </button>
+            <sc-if value="{{ loc.expanded }}">
+              <div style="padding:0 22px 22px;display:flex;flex-direction:column;gap:14px">
+                <sc-if value="{{ loc.note }}">
+                  <div style="font-size:13px;color:var(--color-accent-2-800);background:var(--color-accent-2-100);border-radius:var(--radius-sm);padding:10px 14px">{{ loc.note }}</div>
+                </sc-if>
+                <sc-for list="{{ loc.tiers }}" as="tier" hint-placeholder-count="3">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:16px 18px;background:var(--color-bg);flex-wrap:wrap">
+                    <div style="flex:1;min-width:200px">
+                      <div style="font-family:var(--font-heading);font-size:16px;margin-bottom:4px">{{ tier.label }}</div>
+                      <div style="color:var(--color-neutral-600);font-size:13px">{{ tier.meta }}</div>
+                      <sc-if value="{{ tier.note }}"><div style="color:var(--color-accent-700);font-size:12px;margin-top:4px">{{ tier.note }}</div></sc-if>
+                    </div>
+                    <div style="font-family:var(--font-heading);color:var(--color-accent-800);font-size:17px">¥{{ tier.priceLabel }}</div>
+                    <button class="btn btn-primary" style="border-radius:999px;padding:10px 20px;flex-shrink:0" onclick="{{ tier.select }}">{{ t.pkgCta }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- FAQ -->
+      <div style="margin-top:56px">
+        <h2 style="margin-bottom:20px">{{ t.faqTitle }}</h2>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ faqItems }}" as="f" hint-placeholder-count="8">
+            <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);background:var(--color-surface);overflow:hidden">
+              <button onclick="{{ f.toggle }}" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 18px;cursor:pointer;background:none;border:none;text-align:left;gap:10px">
+                <span style="font-weight:600;font-size:14px">{{ f.q }}</span>
+                <span style="font-size:18px;color:var(--color-accent-700);flex-shrink:0">{{ f.chevron }}</span>
+              </button>
+              <sc-if value="{{ f.expanded }}">
+                <div style="padding:0 18px 16px;color:var(--color-neutral-700);font-size:14px;line-height:1.6">{{ f.a }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ABOUT -->
+  <sc-if value="{{ isAbout }}">
+    <div class="vm-fadein" style="max-width:1180px;margin:0 auto;padding:36px 20px 64px;display:grid;grid-template-columns:{{ aboutCols }};gap:36px;align-items:start">
+      <div class="washed" style="border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5">
+        <image-slot id="about-portrait" shape="rect" src="assets/vivian-portrait.png" placeholder="Portrait of Vivian" style="width:100%;height:100%"></image-slot>
+      </div>
+      <div>
+        <h1 style="margin-bottom:16px">{{ t.aboutTitle }}</h1>
+        <sc-for list="{{ t.aboutBody }}" as="par" hint-placeholder-count="2">
+          <p style="color:var(--color-neutral-700);font-size:16px;margin-bottom:14px">{{ par }}</p>
+        </sc-for>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <sc-for list="{{ t.aboutTags }}" as="tag" hint-placeholder-count="3">
+            <span class="tag tag-neutral">{{ tag }}</span>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:26px;flex-wrap:wrap">
+          <button class="btn btn-primary" style="border-radius:999px;padding:14px 26px" onclick="{{ goBook }}">{{ t.nav.book }}</button>
+          <sc-for list="{{ socials }}" as="soc" hint-placeholder-count="3">
+            <a href="{{ soc.url }}" target="_blank" rel="noopener" aria-label="{{ soc.label }}" style="width:48px;height:48px;border-radius:999px;background:var(--color-accent-2-100);color:var(--color-accent-2-800);display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{ soc.isInstagram }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></sc-if>
+              <sc-if value="{{ soc.isFacebook }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></sc-if>
+              <sc-if value="{{ soc.isWhatsapp }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></sc-if>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- CONTACT / BOOKING -->
+  <sc-if value="{{ isContact }}">
+    <div class="vm-fadein" style="max-width:640px;margin:0 auto;padding:36px 20px 72px">
+      <h1 style="margin-bottom:8px">{{ t.contactTitle }}</h1>
+      <p style="color:var(--color-neutral-700);margin-bottom:26px">{{ t.contactSubtitle }}</p>
+
+      <div style="display:flex;gap:8px;margin-bottom:30px">
+        <sc-for list="{{ stepDots }}" as="d" hint-placeholder-count="4">
+          <div style="flex:1;height:5px;border-radius:999px;background:{{ d.color }}"></div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ submitted }}">
+        <div class="card elev-md" style="background:var(--color-accent-2-100);border-radius:var(--radius-lg);padding:34px;text-align:center">
+          <h2 style="margin-bottom:8px">{{ t.form.success }}</h2>
+          <button class="btn btn-secondary" style="border-radius:999px;margin-top:12px" onclick="{{ goHome }}">{{ t.nav.home }}</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showStep1 }}">
+        <h3 style="margin-bottom:14px">{{ t.form.choosePackage }}</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+          <sc-for list="{{ locationPicker }}" as="lp" hint-placeholder-count="7">
+            <button class="btn" style="border-radius:999px;padding:9px 16px;font-size:13px;background:{{ lp.bg }};color:{{ lp.color }};border-color:{{ lp.border }}" onclick="{{ lp.select }}">{{ lp.label }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hasBookingLocation }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ bookingTiers }}" as="p" hint-placeholder-count="3">
+              <button onclick="{{ p.select }}" style="text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:var(--radius-md);padding:16px 18px;border:2px solid {{ p.selectedBorder }};background:{{ p.selectedBg }}">
+                <span>
+                  <div style="font-family:var(--font-heading);font-size:15px">{{ p.label }}</div>
+                  <div style="color:var(--color-neutral-600);font-size:12px">{{ p.meta }}</div>
+                </span>
+                <span style="font-family:var(--font-heading);color:var(--color-accent-800)">¥{{ p.priceLabel }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ showStep2 }}">
+        <h3 style="margin-bottom:16px">{{ t.steps.1 }}</h3>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="field"><label>{{ t.form.date }}</label><input class="input" type="date" value="{{ bookingData.date }}" onchange="{{ onField_date }}"></div>
+          <div class="field"><label>{{ t.form.headcount }}</label><input class="input" type="number" min="1" value="{{ bookingData.headcount }}" onchange="{{ onField_headcount }}"></div>
+          <div class="field"><label>{{ t.form.notes }}</label><textarea class="input" rows="3" onchange="{{ onField_notes }}">{{ bookingData.notes }}</textarea></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button class="btn btn-ghost" style="border-radius:999px" onclick="{{ prevStep }}">{{ t.form.back }}</button>
+          <button class="btn btn-primary" style="border-radius:999px" onclick="{{ nextStep }}">{{ t.form.next }}</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showStep3 }}">
+        <h3 style="margin-bottom:16px">{{ t.steps.2 }}</h3>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="field"><label>{{ t.form.name }}</label><input class="input" type="text" value="{{ bookingData.name }}" onchange="{{ onField_name }}"></div>
+          <div class="field"><label>{{ t.form.email }}</label><input class="input" type="email" value="{{ bookingData.email }}" onchange="{{ onField_email }}"></div>
+          <div class="field"><label>{{ t.form.phone }}</label><input class="input" type="text" value="{{ bookingData.phone }}" onchange="{{ onField_phone }}"></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button class="btn btn-ghost" style="border-radius:999px" onclick="{{ prevStep }}">{{ t.form.back }}</button>
+          <button class="btn btn-primary" style="border-radius:999px" onclick="{{ nextStep }}">{{ t.form.next }}</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showStep4 }}">
+        <h3 style="margin-bottom:16px">{{ t.form.reviewTitle }}</h3>
+        <div class="card" style="background:var(--color-surface);border-radius:var(--radius-md);padding:20px;display:flex;flex-direction:column;gap:8px;font-size:14px">
+          <div><strong>{{ t.form.choosePackage }}:</strong> {{ selectedPackageName }}</div>
+          <div><strong>{{ t.form.date }}:</strong> {{ bookingData.date }}</div>
+          <div><strong>{{ t.form.headcount }}:</strong> {{ bookingData.headcount }}</div>
+          <div><strong>{{ t.form.name }}:</strong> {{ bookingData.name }}</div>
+          <div><strong>{{ t.form.email }}:</strong> {{ bookingData.email }}</div>
+          <div><strong>{{ t.form.phone }}:</strong> {{ bookingData.phone }}</div>
+        </div>
+        <div class="tag tag-outline" style="margin-top:16px">{{ t.depositNote }}</div>
+        <div style="display:flex;gap:12px;margin-top:20px">
+          <button class="btn btn-ghost" style="border-radius:999px" onclick="{{ prevStep }}">{{ t.form.back }}</button>
+          <button class="btn btn-primary" style="border-radius:999px" onclick="{{ submitBooking }}">{{ t.form.submit }}</button>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid var(--color-divider);padding:32px 20px;max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+    <div style="font-family:var(--font-heading);font-size:16px">Vivian Mukotaka</div>
+    <div style="display:flex;gap:10px">
+      <sc-for list="{{ socials }}" as="soc" hint-placeholder-count="3">
+        <a href="{{ soc.url }}" target="_blank" rel="noopener" aria-label="{{ soc.label }}" style="width:34px;height:34px;border-radius:999px;background:var(--color-surface);color:var(--color-accent-700);display:flex;align-items:center;justify-content:center">
+          <sc-if value="{{ soc.isInstagram }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></sc-if>
+          <sc-if value="{{ soc.isFacebook }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></sc-if>
+          <sc-if value="{{ soc.isWhatsapp }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></sc-if>
+        </a>
+      </sc-for>
+    </div>
+    <div style="color:var(--color-neutral-600);font-size:13px">© 2026 Vivian Mukotaka · {{ t.footer.rights }}</div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const IG_URL = 'https://www.instagram.com/vivimukotakaphoto/';
+const SOCIALS_RAW = [
+  { key:'instagram', label:'Instagram', url:'https://www.instagram.com/vivimukotakaphoto/', isInstagram:true },
+  { key:'facebook', label:'Facebook', url:'https://www.facebook.com/VivianMukotakaPhoto/', isFacebook:true },
+  { key:'whatsapp', label:'WhatsApp', url:'https://wa.me/819000000000', isWhatsapp:true }
+];
+
+const I18N = {
+  en: {
+    nav: { home:'Home', blog:'Blog', portfolio:'Portfolio', packages:'Packages', about:'About', contact:'Contact', book:'Book Now' },
+    hero: { kicker:'Photographer in Japan', title:'Your Japan story, told in photographs', subtitle:'Portrait sessions in Tokyo, Kyoto, Osaka, Nara and Mount Fuji for couples, families and solo travelers.', cta:'Book Now', cta2:'See Packages' },
+    trust: { line:'Brazilian photographer based in Kyoto. I speak English, Portuguese and Japanese.' },
+    sessionsTitle: 'Find your session',
+    sessions: [
+      { glyph:'♡', title:'Couples & Proposal', desc:'Romantic portraits and proposal photography in Kyoto, Osaka or Nara.', priceFrom:'From ¥48,000' },
+      { glyph:'✺', title:'Family', desc:'A relaxed session to capture your trip together.', priceFrom:'From ¥60,000' },
+      { glyph:'●', title:'Solo Portrait', desc:'A guided portrait session, just for you.', priceFrom:'From ¥45,000' },
+      { glyph:'❁', title:'Kimono & Culture', desc:'Traditional kimono and a session in a historic setting.', priceFrom:'From ¥45,000' }
+    ],
+    portfolioTitle: 'Recent sessions',
+    portfolioCta: 'View full portfolio',
+    igStrip: { title:'Follow along on Instagram', handle:'@vivimukotakaphoto', cta:'Follow' },
+    ctaBand: { title:'Ready to plan your session in Japan?', subtitle:'Sessions fill up fast during cherry blossom and autumn foliage seasons.', cta:'Book Now' },
+    filters: { all:'All', tokyo:'Tokyo', kyoto:'Kyoto', osaka:'Osaka' },
+    packagesTitle: 'Packages',
+    packagesSubtitle: 'Every collection includes edited digital photos delivered within 7 business days.',
+    depositNote: 'No booking is confirmed until the deposit and signed contract are received.',
+    pkgCta: 'Book',
+    faqTitle: 'Frequently Asked Questions',
+    faq: [
+      { q:'How do I wear a kimono (traditional Japanese clothing)?', a:'The kimono can be rented at shops that offer options for women, men, and children. I can help with the reservation. The rental costs between 5,000 to 10,000 yen per person and includes hairstyling, a bag, and geta (wooden sandals).' },
+      { q:'Where are the photos taken?', a:'At the most photogenic spots in each city! After confirming the session, we\u2019ll plan the perfect itinerary based on your preferences.' },
+      { q:'How many people can participate in the photoshoot?', a:'There is no limit, but ideally, a maximum of 4 people is recommended to make the most of the time. With more people, individual time decreases.' },
+      { q:'Where do you live? Do you travel around Japan?', a:'I live in Kyoto, close to the main station, so I have easy access to Osaka, Tokyo, and other cities.' },
+      { q:'How to secure my booking?', a:'To secure your session, please sign the photography contract and make a non-refundable deposit of 15,000 JPY via PayPal or bank transfer. This deposit ensures your booking and includes a consultation to help you choose the best location, outfits, and timing for your shoot.' },
+      { q:'When will we get our photos?', a:'You will receive an online gallery link with all your photos within 7 business days.' },
+      { q:'What happens if there\u2019s a rain forecast?', a:'If there\u2019s a rain forecast, we can reschedule the photoshoot. I\u2019ll do my best to fit it into my schedule. If rescheduling is not possible, I\u2019ll refund the deposit.' },
+      { q:'How long do I have to download the photos?', a:'The photos are sent by a download link, with access for 1 year, so you can download them at your convenience.' }
+    ],
+    aboutTitle: 'Hello, I\u2019m Vivian Mukotaka',
+    aboutBody: [
+      'Based in Kyoto, I\u2019m a half-Japanese, half-Brazilian photographer with 8 years of experience and over 500 travelers photographed. Specializing in portraits, couple, and family sessions, my goal is to turn your trip into beautiful memories that last a lifetime.',
+      'Available in Japan: Tokyo, Kyoto, Osaka, Nara & Mount Fuji.'
+    ],
+    aboutTags: ['8 years of experience','500+ travelers photographed','PT · EN · JP'],
+    contactTitle: 'Book your session',
+    contactSubtitle: 'Tell us a bit about your trip and we\u2019ll confirm availability within 48 hours.',
+    steps: ['Session','Date & details','Your info','Review'],
+    form: {
+      choosePackage:'Choose a session', date:'Preferred date', headcount:'Number of people', notes:'Anything we should know? (optional)',
+      name:'Full name', email:'Email', phone:'Phone / WhatsApp',
+      back:'Back', next:'Continue', submit:'Send request',
+      reviewTitle:'Review your request',
+      success:'Thank you! Vivian will reply within 48 hours to confirm your session.'
+    },
+    blog: { title:'Blog', subtitle:'Tips for planning your photo session and making the most of your trip to Japan.', back:'Back to blog' },
+    footer: { rights:'All rights reserved.' }
+  },
+  pt: {
+    nav: { home:'Início', blog:'Blog', portfolio:'Portfólio', packages:'Pacotes', about:'Sobre', contact:'Contato', book:'Reservar' },
+    hero: { kicker:'Fotógrafa no Japão', title:'Sua história no Japão, contada em fotos', subtitle:'Ensaios em Tóquio, Kyoto, Osaka, Nara e Monte Fuji para casais, famílias e viajantes solo.', cta:'Reservar agora', cta2:'Ver pacotes' },
+    trust: { line:'Fotógrafa brasileira baseada em Kyoto. Atendo em português, inglês e japonês.' },
+    sessionsTitle: 'Encontre seu ensaio',
+    sessions: [
+      { glyph:'♡', title:'Casais & Pedido de casamento', desc:'Retratos românticos e fotos de pedido de casamento em Kyoto, Osaka ou Nara.', priceFrom:'A partir de ¥48.000' },
+      { glyph:'✺', title:'Família', desc:'Ensaios tranquilos para registrar sua viagem em família.', priceFrom:'A partir de ¥60.000' },
+      { glyph:'●', title:'Retrato individual', desc:'Um ensaio guiado, só para você.', priceFrom:'A partir de ¥45.000' },
+      { glyph:'❁', title:'Kimono & Cultura', desc:'Kimono tradicional e ensaio em um cenário histórico.', priceFrom:'A partir de ¥45.000' }
+    ],
+    portfolioTitle: 'Ensaios recentes',
+    portfolioCta: 'Ver portfólio completo',
+    igStrip: { title:'Acompanhe no Instagram', handle:'@vivimukotakaphoto', cta:'Seguir' },
+    ctaBand: { title:'Pronta para planejar seu ensaio no Japão?', subtitle:'As datas ficam concorridas nas temporadas de sakura e folhas de outono.', cta:'Reservar agora' },
+    filters: { all:'Todos', tokyo:'Tóquio', kyoto:'Kyoto', osaka:'Osaka' },
+    packagesTitle: 'Pacotes',
+    packagesSubtitle: 'Toda coleção inclui fotos editadas entregues em até 7 dias úteis.',
+    depositNote: 'Nenhuma reserva é confirmada até a confirmação do depósito e do contrato assinado.',
+    pkgCta: 'Reservar',
+    faqTitle: 'Perguntas Frequentes',
+    faq: [
+      { q:'Como eu visto um kimono (roupa tradicional japonesa)?', a:'O kimono pode ser alugado em lojas que oferecem opções para mulheres, homens e crianças. Posso ajudar com a reserva. O aluguel custa entre 5.000 a 10.000 ienes por pessoa e inclui penteado, bolsa e geta (sandálias de madeira).' },
+      { q:'Onde as fotos serão feitas?', a:'Nos locais mais fotogênicos de cada cidade! Após confirmar a sessão, vamos planejar o roteiro perfeito com base nas suas preferências.' },
+      { q:'Quantas pessoas podem participar do ensaio?', a:'Não há limite, mas idealmente, é recomendado um máximo de 4 pessoas para aproveitar ao máximo o tempo. Com mais pessoas, o tempo individual diminui.' },
+      { q:'Onde você mora? Você viaja pelo Japão?', a:'Moro em Kyoto, perto da estação principal, o que me dá fácil acesso a Osaka, Tóquio e outras cidades.' },
+      { q:'Como garantir minha reserva?', a:'Para garantir sua sessão, por favor, assine o contrato de fotografia e faça um depósito não reembolsável de 15.000 ienes via PayPal ou transferência bancária. Esse depósito garante a sua reserva e inclui uma consultoria para ajudar a escolher o melhor local, roupas e horário para o ensaio.' },
+      { q:'Quando recebo as fotos?', a:'Você receberá um link para a galeria online com todas as suas fotos dentro de 7 dias úteis.' },
+      { q:'E se chover?', a:'Se houver previsão de chuva, podemos remarcar a sessão de fotos. Farei o possível para encaixar na minha agenda. Se não for possível remarcar, você recebe o reembolso integral do depósito.' },
+      { q:'Quanto tempo tenho para baixar as fotos?', a:'As fotos são enviadas por meio de um link de download, com acesso por 1 ano, para que você possa baixá-las com tranquilidade.' }
+    ],
+    aboutTitle: 'Prazer, sou a Vivian Mukotaka',
+    aboutBody: [
+      'Fotógrafa brasileira com 8 anos de experiência e mais de 500 viajantes fotografados, neta de japoneses e atualmente residente em Kyoto, antiga capital do Japão. Especialista em retratos solo, de casais e famílias, meu objetivo é transformar sua viagem em lindas memórias para toda a vida.',
+      'Atendo no Japão: Tóquio, Kyoto, Osaka, Nara & Monte Fuji.'
+    ],
+    aboutTags: ['8 anos de experiência','+500 viajantes fotografados','PT · EN · JP'],
+    contactTitle: 'Reserve seu ensaio',
+    contactSubtitle: 'Conte um pouco sobre sua viagem e confirmaremos a disponibilidade em até 48 horas.',
+    steps: ['Ensaio','Data e detalhes','Seus dados','Revisão'],
+    form: {
+      choosePackage:'Escolha um ensaio', date:'Data preferida', headcount:'Número de pessoas', notes:'Algo que devemos saber? (opcional)',
+      name:'Nome completo', email:'E-mail', phone:'Telefone / WhatsApp',
+      back:'Voltar', next:'Continuar', submit:'Enviar pedido',
+      reviewTitle:'Revise seu pedido',
+      success:'Obrigada! A Vivian responderá em até 48 horas para confirmar seu ensaio.'
+    },
+    blog: { title:'Blog', subtitle:'Dicas para planejar seu ensaio e aproveitar ao máximo sua viagem ao Japão.', back:'Voltar ao blog' },
+    footer: { rights:'Todos os direitos reservados.' }
+  },
+  ja: {
+    nav: { home:'ホーム', blog:'ブログ', portfolio:'ポートフォリオ', packages:'プラン', about:'プロフィール', contact:'お問い合わせ', book:'予約する' },
+    hero: { kicker:'日本で活動するフォトグラファー', title:'日本での物語を、写真に', subtitle:'東京・京都・大阪・奈良・富士山でのカップル・ご家族・お一人様向け撮影プラン。', cta:'今すぐ予約', cta2:'プランを見る' },
+    trust: { line:'京都在住のブラジル人フォトグラファーです。日本語・英語・ポルトガル語で対応しています。' },
+    sessionsTitle: '撮影プランを選ぶ',
+    sessions: [
+      { glyph:'♡', title:'カップル・プロポーズ', desc:'京都・大阪・奈良でのロマンティックな撮影とプロポーズ写真。', priceFrom:'¥48,000〜' },
+      { glyph:'✺', title:'ファミリー', desc:'旅の思い出をゆったりと残す家族撮影。', priceFrom:'¥60,000〜' },
+      { glyph:'●', title:'個人ポートレート', desc:'あなただけのガイド付き撮影セッション。', priceFrom:'¥45,000〜' },
+      { glyph:'❁', title:'着物・文化体験', desc:'着物レンタルと歴史的な場所での撮影。', priceFrom:'¥45,000〜' }
+    ],
+    portfolioTitle: '最近の撮影',
+    portfolioCta: 'ポートフォリオをすべて見る',
+    igStrip: { title:'Instagramでフォロー', handle:'@vivimukotakaphoto', cta:'フォローする' },
+    ctaBand: { title:'日本での撮影を予約しませんか？', subtitle:'桜や紅葉の季節は予約がすぐに埋まります。', cta:'今すぐ予約' },
+    filters: { all:'すべて', tokyo:'東京', kyoto:'京都', osaka:'大阪' },
+    packagesTitle: 'プラン',
+    packagesSubtitle: 'すべてのプランに、7営業日以内にお届けする編集済みデータが含まれます。',
+    depositNote: 'デポジットと契約書のご確認まで予約は確定しません。',
+    pkgCta: '予約',
+    faqTitle: 'よくある質問',
+    faq: [
+      { q:'着物はどうやって着られますか？', a:'着物は女性・男性・お子様向けのレンタルショップでお借りいただけます。予約のお手伝いも可能です。レンタル料金は1名あたり5,000〜10,000円で、ヘアセット、バッグ、下駄が含まれます。' },
+      { q:'撮影場所はどこですか？', a:'各都市で最も写真映えするスポットで撮影します。ご予約確定後、ご希望に合わせて最適な撮影プランをご案内します。' },
+      { q:'何人まで撮影に参加できますか？', a:'人数の制限はありませんが、最大4名程度が時間を有効に使える目安です。人数が増えると、お一人あたりの撮影時間は短くなります。' },
+      { q:'どこにお住まいですか？日本各地に行けますか？', a:'京都の中心駅近くに住んでいるため、大阪・東京など各都市へのアクセスも良好です。' },
+      { q:'予約を確定するには？', a:'撮影契約書へのご署名と、PayPalまたは銀行振込での15,000円の返金不可デポジットのお支払いで予約が確定します。デポジットには、場所・服装・時間帯を決めるための相談も含まれます。' },
+      { q:'写真はいつ受け取れますか？', a:'7営業日以内に、すべての写真が入ったオンラインギャラリーのリンクをお送りします。' },
+      { q:'雨の予報の場合はどうなりますか？', a:'雨の予報がある場合は撮影日を変更できます。スケジュールに合わせて調整いたします。変更が難しい場合はデポジットを返金いたします。' },
+      { q:'写真のダウンロード期間はどれくらいですか？', a:'ダウンロードリンクは1年間有効ですので、ご都合の良いタイミングでダウンロードいただけます。' }
+    ],
+    aboutTitle: 'こんにちは、Vivian Mukotakaです',
+    aboutBody: [
+      '京都在住、日系ブラジル人のフォトグラファーです。8年の経験と500名以上の撮影実績があり、ポートレート・カップル・ファミリー撮影を専門としています。旅の思い出を一生の宝物にすることが目標です。',
+      '撮影対応地域：東京・京都・大阪・奈良・富士山。'
+    ],
+    aboutTags: ['8年の経験','500名以上の撮影実績','日本語 · 英語 · ポルトガル語'],
+    contactTitle: '撮影を予約する',
+    contactSubtitle: '旅のご予定を少し教えてください。48時間以内に空き状況をご連絡します。',
+    steps: ['プラン','日時・詳細','お客様情報','確認'],
+    form: {
+      choosePackage:'プランを選択', date:'希望日', headcount:'人数', notes:'その他ご要望（任意）',
+      name:'お名前', email:'メールアドレス', phone:'電話番号 / WhatsApp',
+      back:'戻る', next:'次へ', submit:'送信する',
+      reviewTitle:'内容の確認',
+      success:'ありがとうございます！48時間以内にVivianよりご連絡いたします。'
+    },
+    blog: { title:'ブログ', subtitle:'撮影の計画や日本旅行を楽しむためのヒント。', back:'ブログに戻る' },
+    footer: { rights:'All rights reserved.' }
+  }
+};
+
+const BLOG_POSTS_RAW = [
+  { id:'kimono-guide', category:{en:'Kimono',pt:'Kimono',ja:'着物'}, date:'2026-03-02', imgId:'blog-kimono',
+    title:{en:'How to Rent a Kimono in Kyoto',pt:'Como Alugar um Kimono em Kyoto',ja:'京都で着物をレンタルする方法'},
+    excerpt:{en:'Everything you need to know before wearing a kimono for your photo session.',pt:'Tudo que você precisa saber antes de vestir um kimono no seu ensaio.',ja:'撮影で着物を着る前に知っておきたいこと。'},
+    body:{
+      en:['Wearing a kimono is one of the most requested experiences for sessions in Kyoto, and it\u2019s easier to arrange than most travelers expect.','Rental shops near the main temples offer options for women, men and children, and the price usually includes hairstyling, a small bag and geta sandals.','I can help you book the rental shop that best fits your schedule and the look you want, so everything is ready before we start shooting.'],
+      pt:['Vestir um kimono é uma das experiências mais pedidas nos ensaios em Kyoto, e é mais simples de organizar do que a maioria dos viajantes imagina.','Lojas de aluguel perto dos principais templos oferecem opções para mulheres, homens e crianças, e o preço geralmente inclui penteado, uma bolsa pequena e sandálias geta.','Posso ajudar você a reservar a loja que melhor se encaixa no seu horário e no visual que você quer, para que tudo esteja pronto antes de começarmos o ensaio.'],
+      ja:['着物での撮影は京都で最も人気のあるリクエストのひとつで、想像以上に簡単に手配できます。','主要な寺院周辺のレンタルショップでは女性・男性・お子様向けのプランがあり、料金にはヘアセット、小さなバッグ、下駄が含まれることが多いです。','ご希望のスケジュールと雰囲気に合ったお店の予約をお手伝いしますので、撮影当日は準備万端の状態からスタートできます。']
+    } },
+  { id:'tokyo-spots', category:{en:'Locations',pt:'Locais',ja:'撮影スポット'}, date:'2026-02-18', imgId:'blog-tokyo',
+    title:{en:'Best Photo Spots in Tokyo for Couples',pt:'Melhores Locais para Casais em Tóquio',ja:'カップルにおすすめの東京の撮影スポット'},
+    excerpt:{en:'A few of my favorite corners of Tokyo for romantic portraits, at any time of year.',pt:'Alguns dos meus cantos favoritos em Tóquio para retratos românticos, em qualquer época do ano.',ja:'一年を通して使える、東京のお気に入りのロマンティックな撮影スポット。'},
+    body:{
+      en:['Tokyo has no shortage of photogenic corners, but a few spots consistently give the softest light and the calmest backdrops for couples.','Quiet shrine grounds early in the morning, riverside paths at golden hour, and quieter side streets near the busier districts all work beautifully.','During our consultation, I\u2019ll suggest the best fit for your dates based on the season, the crowds, and the mood you\u2019re going for.'],
+      pt:['Tóquio tem cantos fotogênicos por todos os lados, mas alguns locais entregam consistentemente a luz mais suave e os cenários mais tranquilos para casais.','Terrenos de santuários silenciosos pela manhã, caminhos à beira-rio na hora dourada e ruas mais calmas perto dos bairros movimentados funcionam muito bem.','Durante nossa consultoria, vou sugerir a melhor opção para suas datas considerando a estação, o movimento e o clima que você procura.'],
+      ja:['東京には写真映えするスポットがたくさんありますが、カップル撮影に特に向いているのは柔らかな光と落ち着いた背景が得られる場所です。','早朝の静かな神社、ゴールデンアワーの川沿いの道、賑やかな繁華街の近くにある静かな小道などがおすすめです。','ご相談の際に、季節や混雑状況、ご希望の雰囲気に合わせて最適な場所をご提案します。']
+    } },
+  { id:'proposal-tips', category:{en:'Proposal',pt:'Pedido de Casamento',ja:'プロポーズ'}, date:'2026-01-25', imgId:'blog-proposal',
+    title:{en:'Planning a Surprise Proposal Photoshoot in Japan',pt:'Planejando um Pedido de Casamento Surpresa no Japão',ja:'日本でのサプライズプロポーズ撮影を計画する'},
+    excerpt:{en:'How to keep the surprise while making sure everything is photographed.',pt:'Como manter a surpresa garantindo que tudo seja fotografado.',ja:'サプライズを保ちながら、すべての瞬間を撮影する方法。'},
+    body:{
+      en:['A proposal session works best when your partner has no idea a photographer is nearby, so we plan the whole shoot around blending in.','I\u2019ll usually scout the spot in advance, position myself at a natural distance, and photograph as the moment unfolds rather than staging it.','After the proposal, we continue with a short engagement session so you leave with both the surprise and a full set of portraits together.'],
+      pt:['Um ensaio de pedido de casamento funciona melhor quando o parceiro não percebe que há uma fotógrafa por perto, então planejamos tudo para passar despercebida.','Normalmente faço um reconhecimento do local com antecedência, me posiciono a uma distância natural e fotografo o momento acontecendo, sem montagens.','Depois do pedido, seguimos com uma sessão curta de casal para você sair com a surpresa registrada e um conjunto completo de retratos juntos.'],
+      ja:['プロポーズ撮影は、パートナーがカメラマンの存在に気づかない状態で行うのが最も自然です。そのため、目立たない立ち位置を事前に計画します。','事前に場所を下見し、自然な距離感でポジションを取り、演出せずにその瞬間を撮影します。','プロポーズの後は短いカップル撮影を続けて行い、サプライズの記録とお二人のポートレートの両方をお届けします。']
+    } },
+  { id:'what-to-wear', category:{en:'Tips',pt:'Dicas',ja:'アドバイス'}, date:'2025-12-10', imgId:'blog-wear',
+    title:{en:'What to Wear for Your Photo Session in Japan',pt:'O Que Vestir no Seu Ensaio no Japão',ja:'日本での撮影におすすめの服装'},
+    excerpt:{en:'Simple outfit tips that photograph well against Japan\u2019s streets, temples and seasons.',pt:'Dicas simples de roupas que ficam ótimas nas ruas, templos e estações do Japão.',ja:'日本の街や寺院、季節に映えるシンプルな服装のヒント。'},
+    body:{
+      en:['Solid colors and soft textures almost always photograph better than busy patterns, especially against Japan\u2019s textured streets and temples.','For couples and families, coordinating works better than matching: pick a shared color palette instead of identical outfits.','I\u2019ll send a short style guide after booking so you can plan outfits around the season and location we choose together.'],
+      pt:['Cores sólidas e texturas suaves quase sempre ficam melhores nas fotos do que estampas cheias, especialmente contra as ruas e templos do Japão.','Para casais e famílias, combinar tons funciona melhor do que usar roupas idênticas: escolha uma paleta de cores compartilhada.','Envio um guia de estilo curto após a reserva para você planejar as roupas de acordo com a estação e o local que escolhermos juntos.'],
+      ja:['無地や柔らかい質感の服は、日本の街並みや寺院の中で華やかな柄よりも写真に映えることが多いです。','カップルやご家族の場合は、同じ服ではなく色味を揃えるコーディネートがおすすめです。','ご予約後に簡単なスタイルガイドをお送りしますので、選んだ季節や場所に合わせて服装を計画できます。']
+    } }
+];
+
+const AREA_WORD = {
+  en: n => n === 1 ? '1 location + nearby areas' : `${n} locations + nearby areas`,
+  pt: n => n === 1 ? '1 local + arredores' : `${n} locais + arredores`,
+  ja: n => `${n}ヶ所+周辺エリア`
+};
+const DUR_LABEL = { en:{min:'min',hr:'hr'}, pt:{min:'min',hr:'h'}, ja:{min:'分',hr:'時間'} };
+function fmtDuration(mins, lang) {
+  if (mins < 60) return `${mins} ${DUR_LABEL[lang].min}`;
+  return `${mins/60} ${DUR_LABEL[lang].hr}`;
+}
+function fmtPhotos(n, approx, lang) {
+  if (lang === 'ja') return `編集済み写真${approx ? '約' : ''}${n}枚`;
+  if (lang === 'pt') return `${approx ? 'cerca de ' : ''}${n} fotos editadas`;
+  return `${approx ? 'about ' : ''}${n} edited photos`;
+}
+function fmtArea(area, lang) {
+  if (area.text) return area.text[lang];
+  return AREA_WORD[lang](area.count);
+}
+
+const LOCATIONS_RAW = [
+  { key:'kyoto', name:{en:'Kyoto Session',pt:'Ensaio em Kyoto',ja:'京都撮影'}, tiers:[
+    { id:'kyoto-mini', label:'Mini Colection', durationMin:30, photos:{n:25}, area:{count:1}, price:45000 },
+    { id:'kyoto-essencial', label:'Essencial Colection', durationMin:60, photos:{n:40}, area:{count:1}, price:60000 },
+    { id:'kyoto-classic', label:'Classic Colection', durationMin:120, photos:{n:100,approx:true}, area:{count:2}, price:90000 },
+    { id:'kyoto-premium', label:'Premium Colection', durationMin:180, photos:{n:200,approx:true}, area:{count:3}, price:120000 }
+  ]},
+  { key:'osaka-night', name:{en:'Osaka Night Session',pt:'Ensaio Noturno em Osaka',ja:'大阪ナイト撮影'}, tiers:[
+    { id:'osaka-night-mini', label:'Mini Colection', durationMin:30, photos:{n:20}, area:{text:{en:'Dotonbori & nearby areas',pt:'Dotonbori e arredores',ja:'道頓堀+周辺エリア'}}, price:35000 },
+    { id:'osaka-night-essencial', label:'Essencial Colection', durationMin:60, photos:{n:40}, area:{text:{en:'Dotonbori & nearby areas',pt:'Dotonbori e arredores',ja:'道頓堀+周辺エリア'}}, price:45000 },
+    { id:'osaka-night-classic', label:'Classic Colection', durationMin:120, photos:{n:100,approx:true}, area:{text:{en:'Dotonbori, Shinsekai & nearby areas',pt:'Dotonbori, Shinsekai e arredores',ja:'道頓堀・新世界+周辺エリア'}}, price:55000 }
+  ]},
+  { key:'osaka', name:{en:'Osaka Session',pt:'Ensaio em Osaka',ja:'大阪撮影'}, tiers:[
+    { id:'osaka-essencial', label:'Essencial Colection', durationMin:60, photos:{n:40}, area:{count:1}, price:65000 },
+    { id:'osaka-classic', label:'Classic Colection', durationMin:120, photos:{n:100,approx:true}, area:{count:2}, price:95000 },
+    { id:'osaka-premium', label:'Premium Colection', durationMin:180, photos:{n:200,approx:true}, area:{count:3}, price:125000 }
+  ]},
+  { key:'nara', name:{en:'Nara Session',pt:'Ensaio em Nara',ja:'奈良撮影'}, tiers:[
+    { id:'nara-essencial', label:'Essencial Colection', durationMin:60, photos:{n:40}, area:{count:1}, price:65000 },
+    { id:'nara-classic', label:'Classic Colection', durationMin:120, photos:{n:100,approx:true}, area:{count:2}, price:95000 },
+    { id:'nara-premium', label:'Premium Colection', durationMin:180, photos:{n:200,approx:true}, area:{count:3}, price:125000 }
+  ]},
+  { key:'proposal', name:{en:'Proposal (Kyoto, Osaka & Nara only)',pt:'Pedido de Casamento (Kyoto, Osaka e Nara)',ja:'プロポーズ（京都・大阪・奈良のみ）'}, tiers:[
+    { id:'proposal-capture', label:'Capture the Moment', durationMin:30, photos:{n:20}, area:{count:1}, price:48000,
+      note:{en:'Includes proposal guide, planning help & sneak peeks in 24h',pt:'Inclui guia para o pedido, ajuda no planejamento e preview em 24h',ja:'プロポーズガイド、計画のサポート、24時間以内のスニークピーク付き'} },
+    { id:'proposal-eng-1h', label:'Proposal + Engagement Session (1h)', durationMin:60, photos:{n:100,approx:true}, area:{count:1}, price:65000,
+      note:{en:'Includes proposal guide, planning help & sneak peeks in 24h',pt:'Inclui guia para o pedido, ajuda no planejamento e preview em 24h',ja:'プロポーズガイド、計画のサポート、24時間以内のスニークピーク付き'} },
+    { id:'proposal-eng-2h', label:'Proposal + Engagement Session (2h)', durationMin:120, photos:{n:200,approx:true}, area:{count:2}, price:95000,
+      note:{en:'Includes proposal guide, planning help & sneak peeks in 24h',pt:'Inclui guia para o pedido, ajuda no planejamento e preview em 24h',ja:'プロポーズガイド、計画のサポート、24時間以内のスニークピーク付き'} }
+  ]},
+  { key:'tokyo', name:{en:'Tokyo Session',pt:'Ensaio em Tóquio',ja:'東京撮影'}, tiers:[
+    { id:'tokyo-essencial', label:'Essencial Colection', durationMin:60, photos:{n:40}, area:{count:1}, price:80000,
+      note:{en:'Extra photo: 1,500 JPY each',pt:'Foto extra: 1.500 JPY cada',ja:'追加写真：1枚1,500円'} },
+    { id:'tokyo-classic', label:'Classic Colection', durationMin:120, photos:{n:100,approx:true}, area:{count:2}, price:100000 },
+    { id:'tokyo-premium', label:'Premium Colection', durationMin:180, photos:{n:200,approx:true}, area:{count:3}, price:120000 }
+  ]},
+  { key:'fuji', name:{en:'Mount Fuji Session',pt:'Ensaio no Monte Fuji',ja:'富士山撮影'}, tiers:[
+    { id:'fuji-essencial', label:'Essencial Colection', durationMin:60, photos:{n:100,approx:true}, area:{count:1}, price:130000 },
+    { id:'fuji-classic', label:'Classic Colection', durationMin:120, photos:{n:200,approx:true}, area:{count:2}, price:150000 }
+  ], locNote:{en:'Additional +30,000 JPY during spring (Mar/Apr) and fall (Nov/Dec) foliage seasons.',pt:'Taxa adicional de +30.000 JPY na primavera (mar/abr) e no outono (nov/dez).',ja:'春（3〜4月）・秋（11〜12月）は追加料金+30,000円がかかります。'} }
+];
+
+const PORTFOLIO = [
+  {id:'pf-1', location:'tokyo', src:'assets/photo-03-asakusa-pagoda.jpg'},
+  {id:'pf-2', location:'tokyo', src:'assets/photo-12-izakaya-alley-couple.jpg'},
+  {id:'pf-3', location:'kyoto', src:'assets/photo-10-kimono-sakura-close.jpg'},
+  {id:'pf-4', location:'kyoto', src:'assets/photo-06-kyoto-bridge-autumn.jpg'},
+  {id:'pf-5', location:'osaka', src:'assets/photo-05-osaka-night-hug.jpg'},
+  {id:'pf-6', location:'tokyo', src:'assets/photo-01-alley-couple.jpg'},
+  {id:'pf-7', location:'kyoto', src:'assets/photo-11-torii-gate.jpg'},
+  {id:'pf-8', location:'osaka', src:'assets/photo-09-red-dress-castle-a.jpg'},
+  {id:'pf-9', location:'tokyo', src:'assets/photo-07-redhead-lanterns.jpg'}
+];
+const IG_PHOTOS = ['assets/photo-08-redhead-osaka-street.jpg','assets/photo-14-kimono-red-shrine.jpg','assets/photo-15-red-dress-castle-b.jpg','assets/photo-16-nara-deer.jpg','assets/photo-04-fan-bamboo.jpg','assets/photo-13-family-bamboo.jpg'];
+const SESSION_IMGS = {'session-couples':'assets/photo-17-proposal-kneeling.jpg','session-family':'assets/photo-13-family-bamboo.jpg','session-solo':'assets/photo-09-red-dress-castle-a.jpg','session-kimono':'assets/photo-04-fan-bamboo.jpg'};
+const BLOG_IMGS = {'blog-kimono':'assets/photo-14-kimono-red-shrine.jpg','blog-tokyo':'assets/photo-03-asakusa-pagoda.jpg','blog-proposal':'assets/photo-01-alley-couple.jpg','blog-wear':'assets/photo-15-red-dress-castle-b.jpg'};
+
+class Component extends DCLogic {
+  state = {
+    page: 'home', lang: 'en', isMobile: false, mobileMenuOpen: false, activePostId: null,
+    portfolioFilter: 'all',
+    expandedLocation: null, expandedFaq: null,
+    bookingLocationKey: null, bookingStep: 1,
+    bookingData: { packageId: null, date:'', headcount:2, notes:'', name:'', email:'', phone:'' },
+    submitted: false
+  };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('vm-lang');
+      if (saved && I18N[saved]) this.setState({ lang: saved });
+      else {
+        const nav = (navigator.language || 'en').slice(0,2);
+        this.setState({ lang: nav === 'ja' ? 'ja' : nav === 'pt' ? 'pt' : 'en' });
+      }
+    } catch (e) {}
+    this.checkMobile();
+    this._onResize = () => this.checkMobile();
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+  checkMobile() { this.setState({ isMobile: window.innerWidth < 820 }); }
+
+  setPage = (page) => this.setState({ page, mobileMenuOpen: false });
+  openPost = (id) => this.setState({ page: 'blogPost', activePostId: id, mobileMenuOpen: false });
+  setLang = (lang) => { this.setState({ lang }); try { localStorage.setItem('vm-lang', lang); } catch (e) {} };
+  setFilter = (f) => this.setState({ portfolioFilter: f });
+  toggleLocation = (key) => this.setState(s => ({ expandedLocation: s.expandedLocation === key ? null : key }));
+  toggleFaq = (i) => this.setState(s => ({ expandedFaq: s.expandedFaq === i ? null : i }));
+  toggleMobileMenu = () => this.setState(s => ({ mobileMenuOpen: !s.mobileMenuOpen }));
+  setBookingLocation = (key) => this.setState({ bookingLocationKey: key });
+
+  selectPackage = (id, locKey) => {
+    this.setState(s => ({ bookingData: { ...s.bookingData, packageId: id }, bookingLocationKey: locKey || s.bookingLocationKey, page: 'contact', bookingStep: 2 }));
+  };
+
+  updateField = (field) => (e) => {
+    const v = e.target.value;
+    this.setState(s => ({ bookingData: { ...s.bookingData, [field]: v } }));
+  };
+
+  nextStep = () => this.setState(s => ({ bookingStep: Math.min(4, s.bookingStep + 1) }));
+  prevStep = () => this.setState(s => ({ bookingStep: Math.max(1, s.bookingStep - 1) }));
+  submitBooking = () => this.setState({ submitted: true });
+
+  renderVals() {
+    const lang = this.state.lang;
+    const t = I18N[lang];
+    const page = this.state.page;
+    const isMobile = this.state.isMobile;
+
+    const sessionImgIds = ['session-couples','session-family','session-solo','session-kimono'];
+    t.sessions.forEach((s, i) => { s.imgId = sessionImgIds[i]; s.imgSrc = SESSION_IMGS[sessionImgIds[i]]; });
+
+    const navKeys = ['home','blog','portfolio','packages','about','contact'];
+    const navItems = navKeys.map(k => ({
+      label: t.nav[k], opacity: page === k ? 1 : 0.68,
+      goto: () => this.setPage(k), gotoMobile: () => this.setPage(k)
+    }));
+
+    const langOptions = ['en','pt','ja'].map(l => ({
+      label: l.toUpperCase(), select: () => this.setLang(l),
+      bg: lang === l ? 'var(--color-accent-100)' : 'var(--color-bg)',
+      border: lang === l ? 'var(--color-accent-400)' : 'var(--color-divider)',
+      color: lang === l ? 'var(--color-accent-800)' : 'var(--color-text)'
+    }));
+
+    const locations = LOCATIONS_RAW.map(loc => {
+      const expanded = this.state.expandedLocation === loc.key;
+      return {
+        key: loc.key, name: loc.name[lang], expanded,
+        chevron: expanded ? '−' : '+',
+        toggle: () => this.toggleLocation(loc.key),
+        note: loc.locNote ? loc.locNote[lang] : null,
+        tiers: loc.tiers.map(tier => ({
+          id: tier.id, label: tier.label,
+          meta: `${fmtDuration(tier.durationMin, lang)} · ${fmtPhotos(tier.photos.n, tier.photos.approx, lang)} · ${fmtArea(tier.area, lang)}`,
+          priceLabel: tier.price.toLocaleString(),
+          note: tier.note ? tier.note[lang] : null,
+          select: () => this.selectPackage(tier.id, loc.key)
+        }))
+      };
+    });
+
+    const locationPicker = LOCATIONS_RAW.map(loc => ({
+      key: loc.key, label: loc.name[lang],
+      select: () => this.setBookingLocation(loc.key),
+      bg: this.state.bookingLocationKey === loc.key ? 'var(--color-accent-500)' : 'var(--color-bg)',
+      color: this.state.bookingLocationKey === loc.key ? '#fff' : 'var(--color-text)',
+      border: this.state.bookingLocationKey === loc.key ? 'var(--color-accent-500)' : 'var(--color-divider)'
+    }));
+
+    const activeLoc = LOCATIONS_RAW.find(l => l.key === this.state.bookingLocationKey);
+    const bookingTiers = activeLoc ? activeLoc.tiers.map(tier => ({
+      id: tier.id, label: tier.label,
+      meta: `${fmtDuration(tier.durationMin, lang)} · ${fmtPhotos(tier.photos.n, tier.photos.approx, lang)} · ${fmtArea(tier.area, lang)}`,
+      priceLabel: tier.price.toLocaleString(),
+      select: () => this.selectPackage(tier.id, activeLoc.key),
+      selectedBorder: this.state.bookingData.packageId === tier.id ? 'var(--color-accent-500)' : 'var(--color-divider)',
+      selectedBg: this.state.bookingData.packageId === tier.id ? 'var(--color-accent-100)' : 'var(--color-surface)'
+    })) : [];
+
+    const faqItems = t.faq.map((f, i) => ({
+      q: f.q, a: f.a, expanded: this.state.expandedFaq === i, chevron: this.state.expandedFaq === i ? '−' : '+',
+      toggle: () => this.toggleFaq(i)
+    }));
+
+    const filterKeys = ['all','tokyo','kyoto','osaka'];
+    const filterOptions = filterKeys.map(k => ({
+      label: t.filters[k], select: () => this.setFilter(k),
+      bg: this.state.portfolioFilter === k ? 'var(--color-accent-500)' : 'var(--color-bg)',
+      color: this.state.portfolioFilter === k ? '#fff' : 'var(--color-text)',
+      border: this.state.portfolioFilter === k ? 'var(--color-accent-500)' : 'var(--color-divider)'
+    }));
+
+    const portfolioItems = PORTFOLIO
+      .filter(p => this.state.portfolioFilter === 'all' || p.location === this.state.portfolioFilter)
+      .map(p => ({ id: p.id, src: p.src, caption: `${t.filters[p.location]} session` }));
+    const homePreview = PORTFOLIO.slice(0,4).map(p => ({ id: p.id, src: p.src, caption: `${t.filters[p.location]} session` }));
+    const igPosts = ['ig-1','ig-2','ig-3','ig-4','ig-5','ig-6'].map((id,i) => ({ id, src: IG_PHOTOS[i], caption: 'Drop a recent Instagram photo' }));
+
+    const fmtDate = (iso) => new Date(iso).toLocaleDateString(lang === 'ja' ? 'ja-JP' : lang === 'pt' ? 'pt-BR' : 'en-US', { year:'numeric', month:'long', day:'numeric' });
+    const blogPosts = BLOG_POSTS_RAW.map(p => ({
+      id: p.id, imgId: p.imgId, imgSrc: BLOG_IMGS[p.imgId], category: p.category[lang], title: p.title[lang], excerpt: p.excerpt[lang],
+      date: fmtDate(p.date), select: () => this.openPost(p.id)
+    }));
+    const homeBlogPreview = blogPosts.slice(0,3);
+    const activeRaw = BLOG_POSTS_RAW.find(p => p.id === this.state.activePostId) || BLOG_POSTS_RAW[0];
+    const activePost = {
+      imgId: activeRaw.imgId, imgSrc: BLOG_IMGS[activeRaw.imgId], category: activeRaw.category[lang], title: activeRaw.title[lang],
+      date: fmtDate(activeRaw.date), body: activeRaw.body[lang]
+    };
+
+    const step = this.state.bookingStep;
+    const stepDots = [1,2,3,4].map(n => ({ color: n <= step ? 'var(--color-accent-500)' : 'var(--color-divider)' }));
+
+    let selectedPackageName = '';
+    for (const loc of LOCATIONS_RAW) {
+      const tier = loc.tiers.find(tr => tr.id === this.state.bookingData.packageId);
+      if (tier) { selectedPackageName = `${loc.name[lang]} — ${tier.label}`; break; }
+    }
+
+    return {
+      t, lang, isDesktopNav: !isMobile, isMobileNav: isMobile,
+      mobileMenuOpen: this.state.mobileMenuOpen, mobileMenuGlyph: this.state.mobileMenuOpen ? '×' : '☰',
+      toggleMobileMenu: this.toggleMobileMenu,
+      navItems, langOptions, igUrl: IG_URL, socials: SOCIALS_RAW,
+      isHome: page === 'home', isPortfolio: page === 'portfolio', isPackages: page === 'packages',
+      isAbout: page === 'about', isContact: page === 'contact', isBlog: page === 'blog', isBlogPost: page === 'blogPost',
+      blogPosts, homeBlogPreview, activePost,
+      goHome: () => this.setPage('home'), goPortfolio: () => this.setPage('portfolio'),
+      goPackages: () => this.setPage('packages'), goBook: () => this.setPage('contact'), goBlog: () => this.setPage('blog'),
+      goBookMobile: () => this.setPage('contact'),
+      heroHeight: isMobile ? '80vh' : 'min(78vh,640px)', heroPad: isMobile ? '32px 20px 40px' : '56px 28px 56px',
+      gridCols2: isMobile ? '1fr' : 'repeat(auto-fit,minmax(240px,1fr))',
+      gridCols3: isMobile ? '1fr 1fr' : 'repeat(3,1fr)',
+      gridCols4: isMobile ? '1fr 1fr' : 'repeat(4,1fr)',
+      aboutCols: isMobile ? '1fr' : '1fr 1.3fr',
+      locations, locationPicker, hasBookingLocation: !!activeLoc, bookingTiers,
+      faqItems, filterOptions, portfolioItems, homePreview, igPosts,
+      gridCols6: isMobile ? 'repeat(3,1fr)' : 'repeat(6,1fr)',
+      bookingData: this.state.bookingData, submitted: this.state.submitted,
+      showStep1: !this.state.submitted && step === 1, showStep2: !this.state.submitted && step === 2,
+      showStep3: !this.state.submitted && step === 3, showStep4: !this.state.submitted && step === 4,
+      stepDots, selectedPackageName,
+      onField_date: this.updateField('date'), onField_headcount: this.updateField('headcount'),
+      onField_notes: this.updateField('notes'), onField_name: this.updateField('name'),
+      onField_email: this.updateField('email'), onField_phone: this.updateField('phone'),
+      nextStep: this.nextStep, prevStep: this.prevStep, submitBooking: this.submitBooking
+    };
+  }
+}
+</script>
+</body>
+</html>
